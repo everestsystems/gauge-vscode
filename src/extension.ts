@@ -1,6 +1,6 @@
 'use strict';
 
-import { debug, ExtensionContext, languages, window, workspace } from 'vscode';
+import { debug, ExtensionContext, languages, window, workspace, extensions } from 'vscode';
 import { GenerateStubCommandProvider } from './annotator/generateStub';
 import { CLI } from './cli';
 import { ConfigProvider } from './config/configProvider';
@@ -18,6 +18,11 @@ const MINIMUM_SUPPORTED_GAUGE_VERSION = '0.9.6';
 const clientsMap: GaugeProjectClientMap = new GaugeProjectClientMap();
 
 export async function activate(context: ExtensionContext) {
+
+    while (!extensions.getExtension('undefined_publisher.everest').isActive){
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
     let cli = CLI.instance();
     if (!cli) {
         return;
