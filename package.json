@@ -19,7 +19,6 @@
   "activationEvents": [
     "onCommand:gauge.createProject",
     "workspaceContains:manifest.json",
-    "onLanguage:gauge",
     "onDebugResolve:gauge"
   ],
   "extensionDependencies": [
