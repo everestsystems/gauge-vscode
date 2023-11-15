@@ -8,7 +8,7 @@
   "description": "Gauge support for VScode.",
   "author": "ThoughtWorks",
   "license": "MIT",
-  "version": "0.1.4-fix-1",
+  "version": "0.1.4-fix-2",
   "publisher": "getgauge",
   "engines": {
     "vscode": "^1.71.0"
@@ -19,7 +19,8 @@
   "activationEvents": [
     "onCommand:gauge.createProject",
     "workspaceContains:manifest.json",
-    "onDebugResolve:gauge"
+    "onDebugResolve:gauge",
+    "onLanguage:gauge"
   ],
   "extensionDependencies": [
     "undefined_publisher.everest"
