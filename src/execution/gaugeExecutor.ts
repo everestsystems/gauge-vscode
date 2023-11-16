@@ -28,7 +28,7 @@ const extensions = [".spec", ".md"];
 const successMessage = "Success: Tests passed.";
 const failureMessage = "Error: Tests failed.";
 
-export class GaugeExecutor extends Disposable {
+export class GaugeExecutor implements Disposable {
     private executing: boolean;
     private aborted: boolean = false;
     private outputChannel = window.createOutputChannel(outputChannelName);
@@ -39,9 +39,11 @@ export class GaugeExecutor extends Disposable {
     private gaugeDebugger: GaugeDebugger;
     private processors: Array<LineTextProcessor> = new Array();
 
-    constructor(private gaugeWorkspace: GaugeWorkspace, private cli: CLI) {
-        super(() => this.dispose());
+    dispose() {
+        this._disposables.forEach((disposable)=>{disposable.dispose()})
+    }
 
+    constructor(private gaugeWorkspace: GaugeWorkspace, private cli: CLI) {
         this.registerLineTextProcessors();
         this.registerExecutionStatus();
         this.registerStopExecution();

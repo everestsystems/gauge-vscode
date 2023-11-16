@@ -27,7 +27,7 @@ const GAUGE_LAUNCH_CONFIG = 'gauge.launch';
 const GAUGE_CODELENS_CONFIG = 'gauge.codeLenses';
 const REFERENCE_CONFIG = 'reference';
 
-export class GaugeWorkspace extends Disposable {
+export class GaugeWorkspace implements Disposable {
     private readonly _fileProvider: SpecificationProvider;
     private _executor: GaugeExecutor;
     private _clientsMap: GaugeProjectClientMap;
@@ -38,8 +38,18 @@ export class GaugeWorkspace extends Disposable {
     private _disposable: Disposable;
     private _specNodeProvider: SpecNodeProvider;
 
+    dispose() {
+        const promises: Thenable<void>[] = [];
+        for (const {client} of this._clientsMap.values()) {
+            promises.push(client.stop());
+        }
+        Promise.all(promises).then(() => undefined);
+
+        this._disposable.dispose()
+    }
+
     constructor(private state: GaugeState, private cli: CLI, clientsMap: GaugeProjectClientMap) {
-        super(() => this.dispose());
+
 
         this._clientsMap = clientsMap
         this._executor = new GaugeExecutor(this, cli);

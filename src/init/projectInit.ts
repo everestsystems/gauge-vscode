@@ -7,17 +7,17 @@ import { commands, Disposable, Progress, Uri, window, workspace } from 'vscode';
 import { CLI } from '../cli';
 import { GaugeCommands, GaugeVSCodeCommands, INSTALL_INSTRUCTION_URI, VSCodeCommands } from "../constants";
 import { FileListItem } from '../types/fileListItem';
-export class ProjectInitializer extends Disposable {
+export class ProjectInitializer implements Disposable {
     private readonly _disposable: Disposable;
 
     private readonly cli: CLI;
 
     constructor(cli: CLI) {
-        super(() => this.dispose());
         this.cli = cli;
         this._disposable = commands.registerCommand(GaugeVSCodeCommands.CreateProject, async () => {
             await this.createProject();
         });
+
     }
 
     dispose() {

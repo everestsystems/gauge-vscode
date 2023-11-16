@@ -5,11 +5,10 @@ import { GaugeVSCodeCommands } from "../constants";
 
 let terminalStack: Terminal[] = [];
 
-export class TerminalProvider extends Disposable {
+export class TerminalProvider implements Disposable {
     private readonly _context: ExtensionContext;
     private readonly _disposable: Disposable;
     constructor(context: ExtensionContext) {
-        super(() => this.dispose());
         this._context = context;
         this._disposable = Disposable.from(
             commands.registerCommand(GaugeVSCodeCommands.ExecuteInTerminal, (text: string) => {
@@ -21,6 +20,10 @@ export class TerminalProvider extends Disposable {
                     , 1000);
             }
         ));
+    }
+
+    dispose() {
+        this._disposable.dispose()
     }
 }
 
