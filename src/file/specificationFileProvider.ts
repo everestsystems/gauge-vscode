@@ -8,13 +8,14 @@ import { CancellationTokenSource } from "vscode-languageclient";
 import { GaugeRequests, GaugeVSCodeCommands } from "../constants";
 import { GaugeWorkspace } from "../gaugeWorkspace";
 
-export class SpecificationProvider extends Disposable {
+export class SpecificationProvider implements Disposable {
 
     private readonly gaugeWorkspace: GaugeWorkspace;
     private _disposable: Disposable;
 
+
+
     constructor(workspace: GaugeWorkspace) {
-        super(() => this.dispose());
         this.gaugeWorkspace = workspace;
         this._disposable = Disposable.from(
             commands.registerCommand(GaugeVSCodeCommands.CreateSpecification, () => {

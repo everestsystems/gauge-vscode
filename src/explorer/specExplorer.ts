@@ -13,7 +13,7 @@ import { GaugeWorkspace } from '../gaugeWorkspace';
 
 const extensions = [".spec", ".md"];
 
-export class SpecNodeProvider extends Disposable implements vscode.TreeDataProvider<GaugeNode> {
+export class SpecNodeProvider   implements vscode.TreeDataProvider<GaugeNode>, Disposable {
     private _onDidChangeTreeData: vscode.EventEmitter<GaugeNode | undefined> =
         new vscode.EventEmitter<GaugeNode | undefined>();
     readonly onDidChangeTreeData: vscode.Event<GaugeNode | undefined> = this._onDidChangeTreeData.event;
@@ -21,8 +21,11 @@ export class SpecNodeProvider extends Disposable implements vscode.TreeDataProvi
     private _disposable: Disposable;
     private _languageClient?: LanguageClient;
 
+    dispose() {
+        this._disposable.dispose()
+    }
+
     constructor(private gaugeWorkspace: GaugeWorkspace) {
-        super(() => this.dispose());
         setCommandContext(GaugeCommandContext.Activated, false);
         if (isSpecExplorerEnabled()) {
             const disposable = window.registerTreeDataProvider(GaugeCommandContext.GaugeSpecExplorer, this);
