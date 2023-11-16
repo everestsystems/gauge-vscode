@@ -30,6 +30,9 @@ export async function activate(context: ExtensionContext) {
     let folders = workspace.workspaceFolders;
     context.subscriptions.push(new ProjectInitializer(cli));
     let hasGaugeProject = folders && folders.some((f) => ProjectFactory.isGaugeProject(f.uri.fsPath));
+    if (!hasGaugeProject){
+        throw new Error("Is no gauge project")
+    }
     if (!hasActiveGaugeDocument(window.activeTextEditor) && !hasGaugeProject) return;
     if (!cli.isGaugeInstalled() || !cli.isGaugeVersionGreaterOrEqual(MINIMUM_SUPPORTED_GAUGE_VERSION)) {
         return showInstallGaugeNotification();
