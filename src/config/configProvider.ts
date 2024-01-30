@@ -5,7 +5,7 @@ import { VSCodeCommands, GaugeVSCodeCommands } from "../constants";
 
 const FILE_ASSOCIATIONS_KEY = "files.associations";
 
-export class ConfigProvider extends Disposable {
+export class ConfigProvider implements Disposable {
     private recommendedSettings = {
         "files.autoSave": "afterDelay",
         "files.autoSaveDelay": 500
@@ -13,9 +13,9 @@ export class ConfigProvider extends Disposable {
 
     private _disposable: Disposable;
 
-    constructor(private context: ExtensionContext) {
-        super(() => this.dispose());
 
+
+    constructor(private context: ExtensionContext) {
         this.applyDefaultSettings();
         this._disposable = commands.registerCommand(GaugeVSCodeCommands.SaveRecommendedSettings,
             () => this.applyAndReload(this.recommendedSettings, ConfigurationTarget.Workspace));

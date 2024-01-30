@@ -19,8 +19,11 @@
   "activationEvents": [
     "onCommand:gauge.createProject",
     "workspaceContains:manifest.json",
-    "onLanguage:gauge",
-    "onDebugResolve:gauge"
+    "onDebugResolve:gauge",
+    "onLanguage:gauge"
+  ],
+  "extensionDependencies": [
+    "undefined_publisher.everest"
   ],
   "icon": "images/gauge-icon.png",
   "galleryBanner": {

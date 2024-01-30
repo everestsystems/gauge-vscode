@@ -1,6 +1,6 @@
 'use strict';
 
-import { debug, ExtensionContext, languages, window, workspace } from 'vscode';
+import { debug, ExtensionContext, languages, window, workspace, extensions } from 'vscode';
 import { GenerateStubCommandProvider } from './annotator/generateStub';
 import { CLI } from './cli';
 import { ConfigProvider } from './config/configProvider';
@@ -18,6 +18,11 @@ const MINIMUM_SUPPORTED_GAUGE_VERSION = '0.9.6';
 const clientsMap: GaugeProjectClientMap = new GaugeProjectClientMap();
 
 export async function activate(context: ExtensionContext) {
+
+    while (!extensions.getExtension('undefined_publisher.everest').isActive){
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
     let cli = CLI.instance();
     if (!cli) {
         return;
@@ -25,6 +30,9 @@ export async function activate(context: ExtensionContext) {
     let folders = workspace.workspaceFolders;
     context.subscriptions.push(new ProjectInitializer(cli));
     let hasGaugeProject = folders && folders.some((f) => ProjectFactory.isGaugeProject(f.uri.fsPath));
+    if (!hasGaugeProject){
+        throw new Error("Is no gauge project")
+    }
     if (!hasActiveGaugeDocument(window.activeTextEditor) && !hasGaugeProject) return;
     if (!cli.isGaugeInstalled() || !cli.isGaugeVersionGreaterOrEqual(MINIMUM_SUPPORTED_GAUGE_VERSION)) {
         return showInstallGaugeNotification();

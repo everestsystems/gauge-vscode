@@ -7,10 +7,9 @@ import {
 } from 'vscode-languageclient/node';
 import { GaugeClients } from "./gaugeClients";
 
-export class ReferenceProvider extends Disposable {
+export class ReferenceProvider implements Disposable {
     private _disposable: Disposable;
     constructor(private clients: GaugeClients) {
-        super(() => this.dispose());
 
         this._disposable = Disposable.from(
             commands.registerCommand(
@@ -18,6 +17,10 @@ export class ReferenceProvider extends Disposable {
             commands.registerCommand(
                 GaugeVSCodeCommands.ShowReferences, this.showStepReferences(clients))
         );
+    }
+
+    public dispose() {
+        this._disposable.dispose()
     }
 
     private showStepReferences(clients: GaugeClients):

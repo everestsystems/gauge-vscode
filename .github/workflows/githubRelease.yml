@@ -33,31 +33,5 @@ jobs:
 
           echo -e "gauge-vscode $version\n\n" > desc.txt
 
-          release_description=$(ruby -e "$(curl -sSfL https://github.com/getgauge/gauge/raw/master/build/create_release_text.rb)" getgauge gauge-vscode)
-
-          echo "$release_description" >> desc.txt
           gh release create --title "gauge-vscode v${version}" --notes-file ./desc.txt "v${version}" *.vsix
 
-  marketplace-release:
-    name: Deploy to marketplace
-    runs-on: ubuntu-latest
-    needs: [github-release]
-    env:
-      VS_PAT: '${{ secrets.VS_PAT }}'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use NodeJS 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Build artifacts
-        run: |
-          npm run build
-
-      - name: Upload to marketplace
-        run: |
-          version=$(ls gauge-* | head -1 | sed "s/\.[^\.]*$//" | sed "s/gauge-//" | sed "s/-[a-z]*\.[a-z0-9_]*$//");
-          npm install
-          npm run publish -- --packagePath gauge-$version.vsix -p $VS_PAT

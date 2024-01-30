@@ -3,9 +3,9 @@
 import { Disposable, ExtensionContext } from "vscode";
 import { LAST_REPORT_PATH } from "./constants";
 
-export class GaugeState extends Disposable {
+export class GaugeState {
     constructor(private context: ExtensionContext) {
-        super(() => this.dispose());
+
     }
 
     setReportPath(reportPath: string) {
